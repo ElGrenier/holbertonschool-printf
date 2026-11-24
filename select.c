@@ -1,26 +1,38 @@
 #include <stdarg.h>
+#include <stddef.h>
 #include "main.h"
 
 /**
- * print_number - dispatch and print numbers
- * @args: The number to be printed
+ * recursive_print - print recursively a number
+ * @number: The number to be printed
  * Return: Nothing
  */
-void print_number(va_list args, int *compteur_ptr)
+int recursive_print(long number)
 {
-	long number = va_arg(args, int);
+	int count = 0;
+
 	if (number < 0)
 	{
 		_putchar('-');
+		count++;
 		number = -number;
 	}
 	if (number >= 10)
 	{
-		print_number(number / 10, *compteur_ptr);
+		count += recursive_print(number / 10);
 	}
 	_putchar(number % 10 + '0');
-	*compteur_ptr += 1;
+	return (count + 1);
+}
 
+/**
+ * print_number - call the recursive function
+ * @args: The number to be printed
+ * Return: Nothing
+ */
+int print_number(va_list args)
+{
+	return (recursive_print(va_arg(args, int)));
 }
 
 /**
@@ -28,10 +40,10 @@ void print_number(va_list args, int *compteur_ptr)
  * @args: The char to be printed
  * Return: Nothing
  */
-void print_char(va_list args, int *compteur_ptr)
+int print_char(va_list args)
 {
 	_putchar(va_arg(args, int));
-	*compteur_ptr += 1;
+	return (1);
 }
 
 /**
@@ -39,25 +51,28 @@ void print_char(va_list args, int *compteur_ptr)
  * @args: The string to be printed
  * Return: Nothing
  */
-void print_string(va_list args, int *compteur_ptr)
+int print_string(va_list args)
 {
 	/* Initialize string to be iterated on*/
-
 	char *string;
+	int count = 0;
+
+	if (string == NULL)
+		string = "(null)";
 	for (string = va_arg(args, char *); *string != '\0'; string++)
 	{
-	_putchar(*string);
-	*compteur_ptr += 1;
+		_putchar(*string);
+		count++;
 	}
+	return (count);
 }
 
 /**
  * select - select the correct way to put the character(s)
  * @args: The aditional arguments of _printf
- * @selector: the character after the inital %
  * Return: Nothing
  */
-void select(va_list args, char selector, int *compteur_ptr)
+void select(va_list args, char selector)
 {
 	int i = 0;
 
@@ -66,14 +81,18 @@ void select(va_list args, char selector, int *compteur_ptr)
 		{'s', print_string},
 		{'d', print_number},
 		{'i', print_number},
-		{'%', print_char},
 		{0, NULL}
 	};
 
+	/*If its %%, don't check for the format and directly print a %*/
+	if (selector == '%')
+		return(_putchar('%'), 1);
+
 	while (formats[i].specifier != 0)
-    {
-        if (formats[i].specifier == selector)
-            formats[i].function(args, compteur_ptr);
-        i++;
-    }
+	{
+		if (formats[i].specifier == selector)
+			formats[i].function(args);
+		i++;
+	}
+	return (0);
 }
