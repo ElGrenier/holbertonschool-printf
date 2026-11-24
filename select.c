@@ -70,6 +70,7 @@ int print_string(va_list args)
 /**
  * select - select the correct way to put the character(s)
  * @args: The aditional arguments of _printf
+ * @selector: The character selector after the %
  * Return: Nothing
  */
 void select(va_list args, char selector)
@@ -86,7 +87,7 @@ void select(va_list args, char selector)
 
 	/*If its %%, don't check for the format and directly print a %*/
 	if (selector == '%')
-		return(_putchar('%'), 1);
+		return (_putchar('%'), 1);
 
 	while (formats[i].specifier != 0)
 	{
