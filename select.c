@@ -57,9 +57,11 @@ int print_string(va_list args)
 	char *string;
 	int count = 0;
 
+	string = va_arg(args, char *);
+
 	if (string == NULL)
 		string = "(null)";
-	for (string = va_arg(args, char *); *string != '\0'; string++)
+	for (; *string != '\0'; string++)
 	{
 		_putchar(*string);
 		count++;
@@ -73,7 +75,7 @@ int print_string(va_list args)
  * @selector: The character selector after the %
  * Return: Nothing
  */
-void select(va_list args, char selector)
+int select(va_list args, char selector)
 {
 	int i = 0;
 
@@ -92,8 +94,8 @@ void select(va_list args, char selector)
 	while (formats[i].specifier != 0)
 	{
 		if (formats[i].specifier == selector)
-			formats[i].function(args);
+			return (formats[i].function(args));
 		i++;
 	}
-	return (0);
+	return (-1);
 }
