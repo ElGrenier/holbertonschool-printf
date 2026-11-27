@@ -18,5 +18,9 @@ typedef struct format
 int _putchar(char c);
 int _printf(const char *format, ...);
 int select(va_list args, char selector);
-
+int recursive_print(long number);
+int print_number(va_list args);
+int print_char(va_list args);
+int print_string(va_list args);
+int gerer_conversion(va_list args, char caractere);
 #endif

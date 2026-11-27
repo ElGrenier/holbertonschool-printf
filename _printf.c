@@ -10,7 +10,7 @@
  * Return: Number of characters printed, or -1 on error
  */
 
-static int gerer_conversion(va_list args, char caractere)
+int gerer_conversion(va_list args, char caractere)
 {
 	if (caractere == '\0')
 		return (-1);
